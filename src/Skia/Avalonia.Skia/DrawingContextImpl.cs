@@ -11,6 +11,8 @@ namespace Avalonia.Skia
 {
     internal class DrawingContextImpl : IDrawingContextImpl
     {
+        public bool SupportsLCDRendering = true;
+        
         private readonly Vector _dpi;
         private readonly Matrix? _postTransform;
         private readonly IDisposable[] _disposables;
@@ -345,7 +347,7 @@ namespace Avalonia.Skia
             using (var paint = CreatePaint(foreground, text.Size))
             {
                 var textImpl = (FormattedTextImpl)text;
-                textImpl.Draw(this, Canvas, origin.ToSKPoint(), paint);
+                textImpl.Draw(this, Canvas, origin.ToSKPoint(), paint, SupportsLCDRendering);
             }
         }
 

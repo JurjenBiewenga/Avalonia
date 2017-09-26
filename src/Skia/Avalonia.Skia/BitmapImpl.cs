@@ -48,7 +48,6 @@ namespace Avalonia.Skia
             public BitmapDrawingContext(SKBitmap bitmap, Vector dpi, IVisualBrushRenderer visualBrushRenderer)
                 : this(CreateSurface(bitmap), dpi, visualBrushRenderer)
             {
-
             }
 
             private static SKSurface CreateSurface(SKBitmap bitmap)
@@ -64,6 +63,7 @@ namespace Avalonia.Skia
                 : base(surface.Canvas, dpi, visualBrushRenderer)
             {
                 _surface = surface;
+                SupportsLCDRendering = false;
             }
 
             public override void Dispose()

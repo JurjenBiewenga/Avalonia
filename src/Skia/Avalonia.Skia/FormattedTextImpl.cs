@@ -37,7 +37,7 @@ namespace Avalonia.Skia
             _paint.TextEncoding = SKTextEncoding.Utf16;
             _paint.IsStroke = false;
             _paint.IsAntialias = true;            
-            _paint.LcdRenderText = false;            
+            _paint.LcdRenderText = true;            
             _paint.SubpixelText = true;
             _paint.Typeface = skiaTypeface;
             _paint.TextSize = (float)(typeface?.FontSize ?? 12);
@@ -172,7 +172,7 @@ namespace Avalonia.Skia
 
         internal void Draw(DrawingContextImpl context,
                            SKCanvas canvas, SKPoint origin,
-                           DrawingContextImpl.PaintWrapper foreground)
+                           DrawingContextImpl.PaintWrapper foreground, bool useLCDRendering = true)
         {
             /* TODO: This originated from Native code, it might be useful for debugging character positions as
              * we improve the FormattedText support. Will need to port this to C# obviously. Rmove when
@@ -209,12 +209,14 @@ namespace Avalonia.Skia
                     ApplyWrapperTo(ref currentPaint, foreground, ref currd, paint);
 
                     bool hasCusomFGBrushes = _foregroundBrushes.Any();
+                    paint.LcdRenderText = useLCDRendering;
 
                     for (int c = 0; c < _skiaLines.Count; c++)
                     {
                         AvaloniaFormattedTextLine line = _skiaLines[c];
 
                         float x = TransformX(origin.X, 0, paint.TextAlign);
+                        paint.LcdRenderText = paint.Color.Alpha == 255;
 
                         if (!hasCusomFGBrushes)
                         {
